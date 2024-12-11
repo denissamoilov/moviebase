@@ -4,8 +4,8 @@ import { getFetchResponse } from "@/shared/utils/utils";
 import { fetchMoviesResponseType, FiltersType } from "@/types";
 
 export async function fetchMovies({
-  genre,
-  minRating,
+  genre = "",
+  minRating = "",
 }: FiltersType): Promise<fetchMoviesResponseType> {
   const baseUrl = "https://api.themoviedb.org/3/discover/movie";
 
@@ -15,15 +15,9 @@ export async function fetchMovies({
     language: "en-US",
     page: "1",
     sort_by: "popularity.desc",
+    with_genres: genre,
+    "vote_average.gte": minRating,
   });
-
-  if (genre) {
-    params.append("with_genres", genre);
-  }
-
-  if (minRating) {
-    params.append("vote_average.gte", minRating);
-  }
 
   const response = await getFetchResponse(`${baseUrl}?${params.toString()}`);
 

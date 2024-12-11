@@ -6,26 +6,29 @@ import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
+  useQuery,
 } from "@tanstack/react-query";
 import { fetchMovies } from "./actions/fetchMovies";
 import { fetchGenres } from "./actions/fetchGenres";
+import { FiltersType } from "@/types";
 
 export default async function MoviesPage({
   searchParams,
 }: {
-  searchParams: { genre: string; minRating: string };
+  searchParams: FiltersType;
 }) {
   const queryClient = new QueryClient();
 
-  const filters = {
+  const filterQuery = {
+    // query: searchParams.query || "",
     genre: searchParams.genre || "all",
-    minRating: searchParams.minRating || "0",
+    minRating: searchParams.minRating || "",
   };
 
   await Promise.all([
     queryClient.prefetchQuery({
-      queryKey: ["movies", filters],
-      queryFn: () => fetchMovies(filters),
+      queryKey: ["movies", filterQuery],
+      queryFn: () => fetchMovies(filterQuery),
     }),
     queryClient.prefetchQuery({
       queryKey: ["genres"],
@@ -38,11 +41,13 @@ export default async function MoviesPage({
   return (
     <HydrationBoundary state={dehydratedState}>
       <div className="text-white p-4">
-        <div className="flex flex-col gap-6 mb-8">
-          <h1 className={`${oswald.className} text-display-large`}>
+        <div className="flex flex-col gap-3 md:gap-6 mb-8">
+          <h1
+            className={`${oswald.className} text-display-small md:text-display-large`}
+          >
             Movie Hub
           </h1>
-          <p className="text-lg">
+          <p className="md:text-lg">
             Movie Haven is your ultimate destination for discovering and
             exploring a vast library of films. With our intuitive search and
             filter features, you can easily find your favorite movies by title
@@ -56,11 +61,11 @@ export default async function MoviesPage({
           <li>Filter by genre</li>
         </ol> */}
         <div className="flex flex-col gap-6">
-          <div className="flex gap-6 justify-between">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-6 justify-between">
             <MovieSearch />
             <MovieFilter />
           </div>
-          <MovieList {...searchParams} />
+          <MovieList />
         </div>
       </div>
     </HydrationBoundary>

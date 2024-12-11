@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${mukta.className} antialiased text-md`}>
+      <body className={`${mukta.className} antialiased text-md min-w-80`}>
         <Provider>
           <div className="max-w-screen-xl mx-auto">{children}</div>
         </Provider>

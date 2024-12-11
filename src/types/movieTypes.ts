@@ -9,12 +9,7 @@ export type fetchMoviesResponseType = {
 
 export type fetchGenresResponseType = {
   data: {
-    genres: [
-      {
-        id: number;
-        name: string;
-      }
-    ];
+    genres: GenreType[];
   };
 };
 
@@ -35,4 +30,11 @@ export type MovieType = {
   vote_count: number;
 };
 
+export type GenreType = {
+  id: number;
+  name: string;
+};
+
 export type FiltersType = { genre: string; minRating: string };
+
+export type SearchQueryType = { query: string };

@@ -13,7 +13,6 @@ export async function fetchGenres(): Promise<fetchGenresResponseType> {
   }
 
   const data = await response.json();
-  console.log("Genres fetched successfully:", data);
 
   return { data: { ...data } };
 }

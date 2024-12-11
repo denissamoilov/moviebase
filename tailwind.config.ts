@@ -9,6 +9,10 @@ const config: Config = {
         "6rem",
         { lineHeight: "7rem", letterSpacing: "-0.094rem" },
       ],
+      "display-small": [
+        "3rem",
+        { lineHeight: "110%", letterSpacing: "-0.094rem" },
+      ],
       lg: ["1.125rem", { lineHeight: "1.5rem" }],
       md: ["1rem", { lineHeight: "1.5rem" }],
       sm: ["0.875rem", { lineHeight: "1.25rem" }],

@@ -2,7 +2,7 @@
 
 import { Input, Select } from "@/shared/ui";
 import { useQuery } from "@tanstack/react-query";
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import useMoviesStore from "../MovieList/moviesStore";
 import { fetchGenresResponseType } from "@/types/movieTypes";
 
@@ -17,9 +17,9 @@ async function fetchGenresClient(): Promise<fetchGenresResponseType> {
 }
 
 export const MovieFilter = memo(() => {
-  const setFilters = useMoviesStore((state) => state.setFilters);
-  const [selectedGenre, setSelectedGenre] = useState("all");
-  const [minRating, setMinRating] = useState("0");
+  const filtersQuery = useMoviesStore((state) => state.filters);
+  const setFiltersQuery = useMoviesStore((state) => state.setFiltersQuery);
+  const setGenres = useMoviesStore((state) => state.setGenres);
 
   const {
     data: genres,
@@ -31,39 +31,50 @@ export const MovieFilter = memo(() => {
     queryFn: fetchGenresClient,
   });
 
+  useEffect(() => {
+    if (genres) {
+      setGenres(genres.data.genres); // Set genres in the store
+    }
+  }, [genres, setGenres]);
+
   if (isLoading) return <div>Loading...</div>;
   if (isError && error) return <div>Error: {error.message}</div>;
 
+  console.log("genres :: ", genres);
+
   const handleGenreChange = useCallback((value: string) => {
-    setSelectedGenre(value);
-    setFilters({ genre: value, minRating });
+    setFiltersQuery({ ...filtersQuery, genre: value });
   }, []);
 
   const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters({ genre: selectedGenre, minRating: event.target.value }); // Update filters
+    setFiltersQuery({ ...filtersQuery, minRating: event.target.value });
   };
 
   return (
     <div className="flex gap-3">
-      <Select
-        value={selectedGenre}
-        onChange={handleGenreChange}
-        options={[
-          { value: "all", label: "All Genres" },
-          ...genres!.data.genres.map(({ id, name }) => ({
-            value: id.toString(),
-            label: name,
-          })),
-        ]}
-      />
+      <div className="w-full">
+        <Select
+          className="grow"
+          value={filtersQuery.genre}
+          onChange={handleGenreChange}
+          options={[
+            { value: "all", label: "All Genres" },
+            ...genres!.data.genres.map(({ id, name }) => ({
+              value: id.toString(),
+              label: name,
+            })),
+          ]}
+        />
+      </div>
 
       <Input
         type="number"
-        value={minRating}
+        value={filtersQuery.minRating}
         onChange={handleRatingChange}
         placeholder="Minimum Rating"
         min="0"
         max="10"
+        className="flex-1"
       />
     </div>
   );

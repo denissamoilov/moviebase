@@ -11,3 +11,7 @@
 - Added hydration state for SSR
 - Added server action for fetching movies
 - Applied fetchMovies on Movies List
+- Implemented search functionality
+
+## Possible improvements
+- Create middlewar between FE and MovieDB API so we could implements filtering on searched items, or search inside fetched movies, same for ranking.

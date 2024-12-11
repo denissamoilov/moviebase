@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/shared/utils";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { CircleAlert, X } from "lucide-react";
 import { Button } from "../Button/Button";
 
@@ -15,11 +15,20 @@ export interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, error, size, label, leftIcon, onClear, value, ...props },
+    {
+      className,
+      error,
+      size,
+      label,
+      leftIcon,
+      onClear,
+      value,
+      defaultValue,
+      ...props
+    },
     ref
   ) => {
-    // const clearableCondition = onClear && value !== "";
-    const clearableCondition = true;
+    const clearableCondition = onClear && defaultValue !== "";
 
     return (
       <div className="flex flex-col gap-1 w-full">
@@ -40,6 +49,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
             ref={ref}
             {...props}
+            // defaultValue={}
+            value={defaultValue}
           />
           {error && (
             <CircleAlert
@@ -57,6 +68,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               variant="ghost"
               size="icon-xs"
               leftIcon={<X size={20} strokeWidth={1.5} />}
+              onClick={onClear}
             />
           )}
         </div>

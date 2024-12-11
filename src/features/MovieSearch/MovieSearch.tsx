@@ -2,29 +2,39 @@
 
 import { Button, Input } from "@/shared/ui";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import useMoviesStore from "../MovieList/moviesStore";
 
-type MovieSearchProps = {
-  onSearch?: (e: string) => void;
-};
-
-export const MovieSearch = ({ onSearch }: MovieSearchProps) => {
+export const MovieSearch = () => {
   const [query, setQuery] = useState("");
+
+  const setSearchQuery = useMoviesStore((state) => state.setSearchQuery);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-    // onSearch(event.target.value); // Call the onSearch prop to update the movie list
   };
+  const onSearchHandle = useCallback(() => {
+    console.log("query ::", query);
+    setSearchQuery(query);
+  }, [query, setSearchQuery]);
+
+  const handleClear = useCallback(() => {
+    setQuery("");
+    setSearchQuery("");
+  }, [setSearchQuery]);
 
   return (
-    <div className="flex gap-3 w-full max-w-md">
+    <div className="flex gap-3 w-full md:max-w-md">
       <Input
         leftIcon={<Search strokeWidth={1.5} size={16} />}
-        value={query}
+        defaultValue={query}
         onChange={handleChange}
         placeholder="Search for movies..."
+        onClear={handleClear}
       />
-      <Button>Search</Button>
+      <Button onClick={onSearchHandle} disabled={!query}>
+        Search
+      </Button>
     </div>
   );
 };
