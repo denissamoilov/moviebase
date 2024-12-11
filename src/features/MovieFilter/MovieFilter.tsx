@@ -2,7 +2,7 @@
 
 import { Input, Select } from "@/shared/ui";
 import { useQuery } from "@tanstack/react-query";
-import { memo, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import useMoviesStore from "../MovieList/moviesStore";
 import { fetchGenresResponseType } from "@/types/movieTypes";
 
@@ -16,7 +16,7 @@ async function fetchGenresClient(): Promise<fetchGenresResponseType> {
   return response.json();
 }
 
-export const MovieFilter = memo(() => {
+export const MovieFilter = () => {
   const filtersQuery = useMoviesStore((state) => state.filters);
   const setFiltersQuery = useMoviesStore((state) => state.setFiltersQuery);
   const setGenres = useMoviesStore((state) => state.setGenres);
@@ -31,6 +31,20 @@ export const MovieFilter = memo(() => {
     queryFn: fetchGenresClient,
   });
 
+  const handleGenreChange = useCallback(
+    (value: string) => {
+      setFiltersQuery({ ...filtersQuery, genre: value });
+    },
+    [filtersQuery, setFiltersQuery]
+  );
+
+  const handleRatingChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFiltersQuery({ ...filtersQuery, minRating: event.target.value });
+    },
+    [filtersQuery, setFiltersQuery]
+  );
+
   useEffect(() => {
     if (genres) {
       setGenres(genres.data.genres); // Set genres in the store
@@ -39,16 +53,6 @@ export const MovieFilter = memo(() => {
 
   if (isLoading) return <div>Loading...</div>;
   if (isError && error) return <div>Error: {error.message}</div>;
-
-  console.log("genres :: ", genres);
-
-  const handleGenreChange = useCallback((value: string) => {
-    setFiltersQuery({ ...filtersQuery, genre: value });
-  }, []);
-
-  const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFiltersQuery({ ...filtersQuery, minRating: event.target.value });
-  };
 
   return (
     <div className="flex gap-3">
@@ -78,4 +82,4 @@ export const MovieFilter = memo(() => {
       />
     </div>
   );
-});
+};

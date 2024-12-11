@@ -3,8 +3,8 @@
 import { useQuery } from "@tanstack/react-query";
 import useMoviesStore from "./moviesStore";
 import { MovieCard } from "./ui/MovieCard/MovieCard";
-import { fetchMoviesResponseType, FiltersType, SearchQueryType } from "@/types";
-import { useEffect, useMemo } from "react";
+import { fetchMoviesResponseType, FiltersType } from "@/types";
+import { useMemo } from "react";
 
 async function fetchMoviesClient(
   searchQuery: FiltersType
@@ -41,9 +41,6 @@ async function searchMovie(query: string): Promise<fetchMoviesResponseType> {
 }
 
 export const MovieList = () => {
-  // const setMovies = useMoviesStore((state) => state.setMovies);
-  // const movies = useMoviesStore((state) => state.movies);
-  // const filters = useMoviesStore((state) => state.filters);
   const filterQuery = useMoviesStore((state) => state.filters);
   const searchQuery = useMoviesStore((state) => state.searchQuery);
 
@@ -68,19 +65,6 @@ export const MovieList = () => {
     enabled: !!searchQuery,
   });
 
-  const searchResultsFilters = useMemo(
-    () =>
-      searchResults?.data?.results.reduce((acc: number[], movie) => {
-        movie.genre_ids?.forEach((genreId) => {
-          if (!acc.includes(genreId)) {
-            acc.push(genreId); // Add genreId if it's not already in the accumulator
-          }
-        });
-        return acc; // Return the accumulator for the next iteration
-      }, []),
-    [searchResults]
-  );
-
   const isLoading = useMemo(
     () => fetchIsLoading || searchIsLoading,
     [fetchIsLoading, searchIsLoading]
@@ -91,7 +75,10 @@ export const MovieList = () => {
     [fetchIsError, searchIsError]
   );
 
-  const error = useMemo(() => fetchError || searchError, [searchError]);
+  const error = useMemo(
+    () => fetchError || searchError,
+    [fetchError, searchError]
+  );
 
   const movies = useMemo(
     () => (searchQuery ? searchResults : fetchedMovies),

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/shared/utils";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { CircleAlert, X } from "lucide-react";
 import { Button } from "../Button/Button";
 
@@ -14,20 +14,7 @@ export interface InputProps
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      className,
-      error,
-      size,
-      label,
-      leftIcon,
-      onClear,
-      value,
-      defaultValue,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, error, leftIcon, onClear, defaultValue, ...props }, ref) => {
     const clearableCondition = onClear && defaultValue !== "";
 
     return (

@@ -1,4 +1,4 @@
-export async function GET(request: Request) {
+export async function GET() {
   const token = process.env.MOVIE_DB_API_KEY;
 
   const res = await fetch("https://api.themoviedb.org/3/genre/movie/list", {

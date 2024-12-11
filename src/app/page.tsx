@@ -6,7 +6,6 @@ import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
-  useQuery,
 } from "@tanstack/react-query";
 import { fetchMovies } from "./actions/fetchMovies";
 import { fetchGenres } from "./actions/fetchGenres";
@@ -55,11 +54,6 @@ export default async function MoviesPage({
             browsing experience as you curate your personal watchlist!
           </p>
         </div>
-        {/* <h2>TODO:</h2>
-        <ol>
-          <li>Search by title</li>
-          <li>Filter by genre</li>
-        </ol> */}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col md:flex-row gap-3 md:gap-6 justify-between">
             <MovieSearch />

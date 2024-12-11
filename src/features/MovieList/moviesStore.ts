@@ -1,9 +1,4 @@
-import {
-  FiltersType,
-  GenreType,
-  MovieType,
-  SearchQueryType,
-} from "@/types/movieTypes";
+import { FiltersType, GenreType, MovieType } from "@/types/movieTypes";
 import { create } from "zustand";
 
 interface MoviesState {
