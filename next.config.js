@@ -11,6 +11,12 @@ const nextConfig = {
       },
     ],
   },
+  // Disable prerendering for API routes to prevent build-time errors
+  experimental: {
+    serverComponentsExternalPackages: [],
+  },
+  // Ensure API routes are not statically generated
+  trailingSlash: false,
 };
 
 export default nextConfig;
